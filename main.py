@@ -35,16 +35,17 @@ def zip_apk_dir(path, zipFile):
             if type(file) is str:
                 if file.endswith('.so') and ZIPSTORED or file.endswith('resources.arsc'):
                     zipFile.write(os.path.join(root, file),
-                               os.path.relpath(os.path.join(root.replace('release/', ''), file),
-                                               os.path.join(path, '..')), zipfile.ZIP_STORED)
+                                  os.path.relpath(os.path.join(root.replace('release/', ''), file),
+                                                  os.path.join(path, '..')), zipfile.ZIP_STORED)
                 else:
                     zipFile.write(os.path.join(root, file),
-                               os.path.relpath(os.path.join(root.replace('release/', ''), file),
-                                               os.path.join(path, '..')), zipfile.ZIP_DEFLATED)
+                                  os.path.relpath(os.path.join(root.replace('release/', ''), file),
+                                                  os.path.join(path, '..')), zipfile.ZIP_DEFLATED)
             else:
                 zipFile.write(os.path.join(root, file),
-                           os.path.relpath(os.path.join(root.replace('release/', ''), file), os.path.join(path, '..')),
-                           zipfile.ZIP_DEFLATED)
+                              os.path.relpath(os.path.join(root.replace('release/', ''), file),
+                                              os.path.join(path, '..')),
+                              zipfile.ZIP_DEFLATED)
 
 
 def replace_apk_file(file_path, item_path):
