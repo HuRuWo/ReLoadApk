@@ -8,41 +8,41 @@ from src import ZIPSTORED
 
 def unzip_apk(zip_name):
     with ZipFile(zip_name, 'r') as zipObject:
-        listOfFileNames = zipObject.namelist()
+        fileNameList = zipObject.namelist()
         zipObject.extractall('release')
-        for fileName in listOfFileNames:
+        for fileName in fileNameList:
             print(fileName)
         zipObject.close()
 
 
 def zip_new_apk():
-    zipf = zipfile.ZipFile('release.RE.zip', 'w', zipfile.ZIP_DEFLATED)
-    zip_apk_dir('release/', zipf)
-    zipf.close()
+    zipFile = zipfile.ZipFile('release.RE.zip', 'w', zipfile.ZIP_DEFLATED)
+    zip_apk_dir('release/', zipFile)
+    zipFile.close()
     shutil.move("release.RE.zip", "release.RE.apk")
     shutil.rmtree('release')
 
 
-def sign_apk(apk_path=''):
+def sign_apk():
     # java -jar uber-apk-signer.jar --allowResign -a release.RE.apk
     val = os.system('java -jar uber-apk-signer.jar --allowResign -a release.RE.apk')
     print(val)
 
 
-def zip_apk_dir(path, ziph):
+def zip_apk_dir(path, zipFile):
     for root, dirs, files in os.walk(path):
         for file in files:
             if type(file) is str:
                 if file.endswith('.so') and ZIPSTORED or file.endswith('resources.arsc'):
-                    ziph.write(os.path.join(root, file),
+                    zipFile.write(os.path.join(root, file),
                                os.path.relpath(os.path.join(root.replace('release/', ''), file),
                                                os.path.join(path, '..')), zipfile.ZIP_STORED)
                 else:
-                    ziph.write(os.path.join(root, file),
+                    zipFile.write(os.path.join(root, file),
                                os.path.relpath(os.path.join(root.replace('release/', ''), file),
                                                os.path.join(path, '..')), zipfile.ZIP_DEFLATED)
             else:
-                ziph.write(os.path.join(root, file),
+                zipFile.write(os.path.join(root, file),
                            os.path.relpath(os.path.join(root.replace('release/', ''), file), os.path.join(path, '..')),
                            zipfile.ZIP_DEFLATED)
 
